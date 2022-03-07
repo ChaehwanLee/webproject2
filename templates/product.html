@@ -1,0 +1,70 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    {% load staticfiles %}
+    {% load thumbnail %}
+    <link rel="stylesheet" type='text/css' href="{% static 'static/css/style.css' %}">
+    <div class="content">
+        <div id="shoptitle">
+            <h2> CART</h2>
+        </div>
+        <form action="{% url "shop:delete_cart" user.pk %}" method="POST">
+            <div class="order_list">
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="clothes">
+                            이미지
+                        </th>
+                        <th class="product">
+                            상품
+                        </th>
+                        <th class="price">
+                            가격
+                        </th>
+                        <th class="quantity">
+                            수량
+                        </th>
+                    </tr>
+                    </thead>
+
+                    {% for product in cart %}
+                        <tr>
+                            <td>
+                                <input type="radio" id="product_{{ product.id }}" name="product" value="{{ product.products.id }}">
+                            </td>
+                            <td class="clothes">
+                                {% thumbnail product.products.image "200x300" crop="center" as im %}
+                                    <a href="{% url '###' product.products.pk %}">
+                                        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ product.name }}">
+                                    </a>
+                                {% endthumbnail %}
+                            </td>
+                            <td class="product">
+                                {{ product.products.name }}
+                            </td>
+                            <td class="quantity">
+                                {{ product.quantity }}
+                            </td>
+                            <td>
+                                {{ product.products.price }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+
+            <div class="or_option">
+            <span class="left">
+                <span class="text">
+                    주문옵션
+                </span>
+                <button type="submit" name="delete_cart" value="delete_cart">삭제</button>
+                {% csrf_token %}
+            </span>
+            </div>
+        </form>
+
+    </div>
+{% endblock content %}
